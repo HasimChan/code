@@ -4,6 +4,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Stack;
 
 /**
  * 双指针：（对撞指针、快慢指针） --> 链表、数组
@@ -110,7 +111,7 @@ class FindContinuousSequence {
     // 方式三：滑动窗口
     public int[][] findContinuousSequence3(int target) {
         List<int[]> vec = new ArrayList<>();
-        for (int l = 1, r = 2; l < r;) {
+        for (int l = 1, r = 2; l < r; ) {
             int sum = (l + r) * (r - l + 1) / 2;
             if (sum == target) {
                 int[] res = new int[r - l + 1];
@@ -164,3 +165,89 @@ class FindContinuousSequence {
         return ret;
     }
 }
+
+/**
+ * 从后往前遍历有时可以节省内存开销（栈）
+ */
+class ReverseWords {
+    /**
+     * 1. String 类工具函数
+     * trim()：删除首尾空格
+     * split(String str)：以 str 分割字符串，返回字符串数组
+     * substring(l, r)：返回子串（左闭右开）
+     */
+
+    /**
+     * 2. 正则表达式
+     */
+    public static void main(String[] args) {
+        String str = "     I  am  a  student. ";
+        System.out.println(new ReverseWords().reverseWords2(str));
+    }
+
+    // 方式一：双指针
+    public String reverseWords1(String s) {
+        s = s.trim(); // 删除首尾空格
+        int j = s.length() - 1, i = j;
+        StringBuilder res = new StringBuilder();
+        while (i >= 0) { // 从后往前遍历，不用增加其他数据结构进行倒转（如栈）
+            while (i >= 0 && s.charAt(i) != ' ')
+                i--; // 搜索首个空格
+            res.append(s.substring(i + 1, j + 1) + " "); // 添加单词
+            while (i >= 0 && s.charAt(i) == ' ')
+                i--; // 跳过单词间空格
+            j = i; // j 指向下个单词的尾字符
+        }
+        return res.toString().trim(); // 转化为字符串并返回
+    }
+
+    // 方式二：库函数法（分割字符串）
+    public String reverseWords2(String s) {
+        String[] strs = s.trim().split(" "); // 删除首尾空格，分割字符串 （可用正则表达式匹配多个空格 "\\s+"，"\s" 表示空格， "+" 表示多个）
+        System.out.println(strs.length);
+        StringBuilder res = new StringBuilder();
+        for(int i = strs.length - 1; i >= 0; i--) { // 倒序遍历单词列表
+            if(strs[i].equals(""))
+                continue; // 遇到空单词则跳过
+            res.append(strs[i] + " "); // 将单词拼接至 StringBuilder
+        }
+        return res.toString().trim(); // 转化为字符串，删除尾部空格，并返回
+    }
+
+    // my solution: 从前往后遍历，增加了开销，思路没问题
+    public String reverseWords(String s) {
+        int l = 0;
+        int r = 0;
+        int len = s.length();
+        Stack<String> stack = new Stack<>();
+
+        while (l < len && r < len) {
+            while (l < len && s.charAt(l) == ' ') {
+                l++;
+            }
+            r = l;
+
+            while (r < len && s.charAt(r) != ' ') {
+                r++;
+            }
+            if (l != r) {
+                stack.push(s.substring(l, r));
+            } else {
+                break;
+            }
+            l = r;
+        }
+        String ret = "";
+
+        while (!stack.empty()) {
+            if (ret == "") {
+                ret = stack.pop();
+            } else {
+                ret += " " + stack.pop();
+            }
+        }
+
+        return ret;
+    }
+}
+
