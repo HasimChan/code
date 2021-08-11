@@ -251,3 +251,33 @@ class ReverseWords {
     }
 }
 
+class ReverseLeftWords {
+    public static void main(String[] args) {
+        String s = "abcdefg";
+        int k = 2;
+
+        System.out.println(new ReverseLeftWords().reverseLeftWords2(s, k));
+    }
+
+    // 方式一：my solution，字符串切片
+    public String reverseLeftWords1(String s, int n) {
+        return s.substring(n, s.length()) + s.substring(0, n);
+    }
+
+    // 方式二：遍历（若不使用字符串切片函数），也可用字符串作缓存对象
+    public String reverseLeftWords2(String s, int n) {
+        StringBuilder builder = new StringBuilder();
+        for (int i = n; i < s.length(); i++) {
+            builder.append(s.charAt(i));
+        }
+        for (int i = 0; i < n; i++) {
+            builder.append(s.charAt(i));
+        }
+        return builder.toString();
+
+/*        StringBuilder res = new StringBuilder(); // 改进：用求余减少for语句
+        for(int i = n; i < n + s.length(); i++)
+            res.append(s.charAt(i % s.length()));
+        return res.toString();*/
+    }
+}
