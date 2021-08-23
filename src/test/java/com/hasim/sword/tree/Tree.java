@@ -10,7 +10,6 @@ public class Tree {
     public TreeNode createTree(int[] array) {
 
 
-
         return null;
     }
 
@@ -60,6 +59,7 @@ class TreeNode {
 
 /**
  * 将数组的值与索引通过哈希表关联比采用遍历查找更高效（如果数组不改变）
+ * 二叉树的前序、中序、后序遍历
  */
 class BuildTree {
     public static void main(String[] args) {
@@ -186,3 +186,46 @@ class BuildTree {
         return -1;
     }
 }
+
+class IsSubStructure {
+
+    // my solution: 需考虑重复节点，故需遍历整树
+    public boolean isSubStructure(TreeNode A, TreeNode B) {
+        if (A == null || B == null)
+            return false;
+
+        if (A.val == B.val) {
+            if (isSubTree(A, B)) {
+                return true;
+            }
+        }
+        if (A == null) {
+            return false;
+        }
+        return isSubStructure(A.left, B) || isSubStructure(A.right, B);
+    }
+
+    private boolean isSubTree(TreeNode A, TreeNode B) {
+        if (B == null)
+            return true;
+        if (A == null || A.val != B.val)
+            return false;
+        return isSubTree(A.left, B.left) && isSubTree(A.right, B.right);
+    }
+
+    // 方式一：写法nb，思想一致
+    public boolean isSubStructure1(TreeNode A, TreeNode B) {
+        return (A != null && B != null) && (recur(A, B) || isSubStructure1(A.left, B) || isSubStructure1(A.right, B));
+    }
+
+    boolean recur(TreeNode A, TreeNode B) {
+        if (B == null)
+            return true;
+        if (A == null || A.val != B.val)
+            return false;
+        return recur(A.left, B.left) && recur(A.right, B.right);
+    }
+
+}
+
+
