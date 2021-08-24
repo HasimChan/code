@@ -1,9 +1,6 @@
 package com.hasim.sword.tree;
 
-import java.util.Deque;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
+import java.util.*;
 
 public class Tree {
 
@@ -228,4 +225,46 @@ class IsSubStructure {
 
 }
 
+class MirrorTree {
+    // my solution: 递归遍历，每次遍历反转左右子树
+    public TreeNode mirrorTree(TreeNode root) {
+        if (root == null) {
+            return null;
+        }
+        TreeNode temp = root.left;
+        root.left = mirrorTree(root.right);
+        root.right = mirrorTree(temp);
+        return root;
+    }
 
+    // 方式一：同 my solution
+    public TreeNode mirrorTree1(TreeNode root) {
+        if (root == null) {
+            return null;
+        }
+        TreeNode left = mirrorTree1(root.left);
+        TreeNode right = mirrorTree1(root.right);
+        root.left = right;
+        root.right = left;
+        return root;
+    }
+
+    // 方式二：辅助栈，思想同递归
+    public TreeNode mirrorTree2(TreeNode root) {
+        if (root == null)
+            return null;
+        Stack<TreeNode> stack = new Stack<>();
+        stack.add(root);
+        while (!stack.isEmpty()) {
+            TreeNode node = stack.pop();
+            if (node.left != null)
+                stack.add(node.left);
+            if (node.right != null)
+                stack.add(node.right);
+            TreeNode tmp = node.left;
+            node.left = node.right;
+            node.right = tmp;
+        }
+        return root;
+    }
+}
