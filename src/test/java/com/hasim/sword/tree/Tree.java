@@ -268,3 +268,36 @@ class MirrorTree {
         return root;
     }
 }
+
+class IsSymmetric {
+    public boolean isSymmetric(TreeNode root) {
+        return root == null ? true : isSymmetric(root.left, root.right); // 空树也算对称
+    }
+
+    private boolean isSymmetric(TreeNode A, TreeNode B) {
+        if (A == null && B != null || A != null && B == null) // 此处可优化为方式一
+            return false;
+        if (A == null && B == null)
+            return true;
+
+        if (A.val == B.val) {
+            return isSymmetric(A.left, B.right) && isSymmetric(A.right, B.left);
+        } else {
+            return false;
+        }
+    }
+
+    // 方式一：同 my solution，但条件判断更为简洁
+    public boolean isSymmetric1(TreeNode root) {
+        return root == null ? true : recur(root.left, root.right);
+    }
+
+    boolean recur(TreeNode L, TreeNode R) {
+        if (L == null && R == null)
+            return true;
+        if (L == null || R == null || L.val != R.val)
+            return false;
+        return recur(L.left, R.right) && recur(L.right, R.left);
+    }
+}
+

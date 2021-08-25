@@ -101,6 +101,15 @@
             </LeetcodeEditor>
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/com/hasim/code/leetcode/editor/cn/[剑指 Offer 28]对称的二叉树.java">
+          <value>
+            <LeetcodeEditor>
+              <option name="contentPath" value="$PROJECT_DIR$/src/main/java/com/hasim/code/leetcode/editor/cn/doc/content/[剑指 Offer 28]对称的二叉树.md" />
+              <option name="path" value="$PROJECT_DIR$/src/main/java/com/hasim/code/leetcode/editor/cn/[剑指 Offer 28]对称的二叉树.java" />
+              <option name="questionId" value="剑指 Offer 28" />
+            </LeetcodeEditor>
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/src/main/java/com/hasim/code/leetcode/editor/cn/[剑指 Offer 31]栈的压入、弹出序列.java">
           <value>
             <LeetcodeEditor>
