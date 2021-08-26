@@ -1,5 +1,7 @@
 package com.hasim.sword.tree;
 
+import com.sun.jmx.remote.internal.ArrayQueue;
+
 import java.util.*;
 
 public class Tree {
@@ -301,3 +303,53 @@ class IsSymmetric {
     }
 }
 
+/**
+ * BFS算法 广度优先搜索
+ * 1. 非递归 有去无回
+ * 2. 按层遍历
+ */
+class LevelOrder {
+    // my solution: 队列
+    public int[] levelOrder(TreeNode root) {
+        if (root == null)
+            return new int[0];
+        LinkedList<TreeNode> queue = new LinkedList<>();
+        ArrayList<Integer> array = new ArrayList<>();
+        queue.add(root);
+        while (queue.size() != 0) {
+            TreeNode poll = queue.poll(); // poll为出队，pop为出栈
+            array.add(poll.val);
+            if (poll.left != null)
+                queue.add(poll.left);
+            if (poll.right != null)
+                queue.add(poll.right);
+        }
+        int len = array.size();
+        int[] retArr = new int[len];
+        for (int i = 0; i < len; i++) {
+            retArr[i] = array.get(i);
+        }
+        return retArr;
+    }
+
+    // 方式一：同my solution，几乎一模一样，怀疑答案是抄我的
+    public int[] levelOrder1(TreeNode root) {
+        if(root == null)
+            return new int[0];
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+        ArrayList<Integer> ans = new ArrayList<>();
+        while(!queue.isEmpty()) {
+            TreeNode node = queue.poll();
+            ans.add(node.val);
+            if(node.left != null)
+                queue.add(node.left);
+            if(node.right != null)
+                queue.add(node.right);
+        }
+        int[] res = new int[ans.size()];
+        for(int i = 0; i < ans.size(); i++)
+            res[i] = ans.get(i);
+        return res;
+    }
+}
