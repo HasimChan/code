@@ -334,22 +334,71 @@ class LevelOrder {
 
     // 方式一：同my solution，几乎一模一样，怀疑答案是抄我的
     public int[] levelOrder1(TreeNode root) {
-        if(root == null)
+        if (root == null)
             return new int[0];
         Queue<TreeNode> queue = new LinkedList<>();
         queue.add(root);
         ArrayList<Integer> ans = new ArrayList<>();
-        while(!queue.isEmpty()) {
+        while (!queue.isEmpty()) {
             TreeNode node = queue.poll();
             ans.add(node.val);
-            if(node.left != null)
+            if (node.left != null)
                 queue.add(node.left);
-            if(node.right != null)
+            if (node.right != null)
                 queue.add(node.right);
         }
         int[] res = new int[ans.size()];
-        for(int i = 0; i < ans.size(); i++)
+        for (int i = 0; i < ans.size(); i++)
             res[i] = ans.get(i);
+        return res;
+    }
+}
+
+class LevelOrder2 {
+    // my solution: 借鉴队列的思想，用两个队列存储树的节点，一个存储当前层，一个存储下一层
+    public List<List<Integer>> levelOrder(TreeNode root) {
+        if (root == null)
+            return new ArrayList<List<Integer>>();
+        ArrayList<List<Integer>> treeList = new ArrayList<>();
+        LinkedList<TreeNode> queue1 = new LinkedList<>();
+        LinkedList<TreeNode> queue2 = new LinkedList<>();
+        queue2.add(root);
+
+        while (!queue1.isEmpty() || !queue2.isEmpty()) {
+            queue1 = queue2;
+            queue2 = new LinkedList<>();
+            ArrayList<Integer> layer = new ArrayList<>();
+            while (!queue1.isEmpty()) {
+                TreeNode poll = queue1.poll();
+                layer.add(poll.val);
+                if (poll.left != null)
+                    queue2.add(poll.left);
+                if (poll.right != null)
+                    queue2.add(poll.right);
+            }
+            treeList.add(layer);
+        }
+        return treeList;
+    }
+
+    // 方式一: 只用一个队列，妙在运用了当前队列的长度
+    public List<List<Integer>> levelOrder1(TreeNode root) {
+        Queue<TreeNode> queue = new LinkedList<>();
+        List<List<Integer>> res = new ArrayList<>();
+        if (root != null)
+            queue.add(root);
+        while (!queue.isEmpty()) {
+            List<Integer> tmp = new ArrayList<>();
+            for (int i = queue.size(); i > 0; i--) { // 此处666
+                TreeNode node = queue.poll();
+                tmp.add(node.val);
+                if (node.left != null)
+                    queue.add(node.left);
+                if (node.right != null)
+                    queue.add(node.right);
+            }
+            res.add(tmp);
+        }
         return res;
     }
 }
