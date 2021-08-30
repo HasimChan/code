@@ -308,6 +308,10 @@ class IsSymmetric {
  * 1. 非递归 有去无回
  * 2. 按层遍历
  */
+
+/**
+ * 层序遍历
+ */
 class LevelOrder {
     // my solution: 队列
     public int[] levelOrder(TreeNode root) {
@@ -354,6 +358,9 @@ class LevelOrder {
     }
 }
 
+/**
+ * 分层打印
+ */
 class LevelOrder2 {
     // my solution: 借鉴队列的思想，用两个队列存储树的节点，一个存储当前层，一个存储下一层
     public List<List<Integer>> levelOrder(TreeNode root) {
@@ -364,7 +371,7 @@ class LevelOrder2 {
         LinkedList<TreeNode> queue2 = new LinkedList<>();
         queue2.add(root);
 
-        while (!queue1.isEmpty() || !queue2.isEmpty()) {
+        while (!queue2.isEmpty()) {
             queue1 = queue2;
             queue2 = new LinkedList<>();
             ArrayList<Integer> layer = new ArrayList<>();
@@ -400,5 +407,206 @@ class LevelOrder2 {
             res.add(tmp);
         }
         return res;
+    }
+}
+
+/**
+ * Z字型遍历
+ * 双端队列 LinkedList nb，可队列可栈可双端队列
+ */
+class LevelOrder3 {
+    // my solution: 层序遍历 + 奇偶层
+    public List<List<Integer>> levelOrder(TreeNode root) {
+        LinkedList<TreeNode> list = new LinkedList<>();
+        LinkedList<List<Integer>> resultList = new LinkedList<>();
+        if (root == null)
+            return resultList;
+        list.add(root);
+        boolean tip = true;
+
+        while (!list.isEmpty()) {
+            int len = list.size();
+            LinkedList<Integer> layer = new LinkedList<>();
+            for (int i = 0; i < len; i++) {
+                TreeNode node = list.poll();
+                layer.add(node.val);
+                if (node.left != null)
+                    list.add(node.left);
+                if (node.right != null)
+                    list.add(node.right);
+            }
+            if (tip) {
+                resultList.add(layer);
+            } else { // 此处较为臃肿
+                LinkedList<Integer> temp = new LinkedList<>();
+                while (!layer.isEmpty()) {
+                    temp.add(layer.removeLast());
+                }
+                resultList.addLast(temp);
+            }
+            tip = !tip;
+        }
+        return resultList;
+    }
+
+    // 方式一：通过返回集合的size大小作为奇偶层依据，通过判断奇偶层选择从头部添加还是从尾部添加
+    public List<List<Integer>> levelOrder1(TreeNode root) {
+        Queue<TreeNode> queue = new LinkedList<>();
+        List<List<Integer>> res = new ArrayList<>();
+        if (root != null)
+            queue.add(root);
+        while (!queue.isEmpty()) {
+            LinkedList<Integer> tmp = new LinkedList<>();
+            for (int i = queue.size(); i > 0; i--) {
+                TreeNode node = queue.poll();
+                if (res.size() % 2 == 0)
+                    tmp.addLast(node.val); // 偶数层 -> 队列头部
+                else
+                    tmp.addFirst(node.val); // 奇数层 -> 队列尾部
+                if (node.left != null)
+                    queue.add(node.left);
+                if (node.right != null)
+                    queue.add(node.right);
+            }
+            res.add(tmp);
+        }
+        return res;
+    }
+
+    // 方式二：以一奇一偶两层为单位遍历树
+    public List<List<Integer>> levelOrder2(TreeNode root) {
+        Deque<TreeNode> deque = new LinkedList<>();
+        List<List<Integer>> res = new ArrayList<>();
+        if (root != null)
+            deque.add(root);
+        while (!deque.isEmpty()) {
+            // 打印奇数层
+            List<Integer> tmp = new ArrayList<>();
+            for (int i = deque.size(); i > 0; i--) {
+                // 从左向右打印
+                TreeNode node = deque.removeFirst();
+                tmp.add(node.val);
+                // 先左后右加入下层节点
+                if (node.left != null)
+                    deque.addLast(node.left);
+                if (node.right != null)
+                    deque.addLast(node.right);
+            }
+            res.add(tmp);
+            if (deque.isEmpty())
+                break; // 若为空则提前跳出
+            // 打印偶数层
+            tmp = new ArrayList<>();
+            for (int i = deque.size(); i > 0; i--) {
+                // 从右向左打印
+                TreeNode node = deque.removeLast();
+                tmp.add(node.val);
+                // 先右后左加入下层节点
+                if (node.right != null)
+                    deque.addFirst(node.right);
+                if (node.left != null)
+                    deque.addFirst(node.left);
+            }
+            res.add(tmp);
+        }
+        return res;
+    }
+
+    // 方式三：层序遍历 + 反转列表
+    public List<List<Integer>> levelOrder3(TreeNode root) {
+        Queue<TreeNode> queue = new LinkedList<>();
+        List<List<Integer>> res = new ArrayList<>();
+        if (root != null)
+            queue.add(root);
+        while (!queue.isEmpty()) {
+            List<Integer> tmp = new ArrayList<>();
+            for (int i = queue.size(); i > 0; i--) {
+                TreeNode node = queue.poll();
+                tmp.add(node.val);
+                if (node.left != null)
+                    queue.add(node.left);
+                if (node.right != null)
+                    queue.add(node.right);
+            }
+            if (res.size() % 2 == 1)
+                Collections.reverse(tmp); // 反转列表
+            res.add(tmp);
+        }
+        return res;
+    }
+}
+
+/**
+ * 有关树的遍历的问题需要了解各种遍历的规律
+ */
+class VerifyPostorder {
+    public static void main(String[] args) {
+        int[] arr = new int[]{4, 6, 12, 8, 16, 14, 10};
+        System.out.println(new VerifyPostorder().verifyPostorder(arr));
+    }
+
+    // my solution: 没解出来，考虑了局部没考虑整体
+    // 思路为找到当前根节点的左孩子节点（仅仅从左往右遍历一次，找到便不再遍历），此处出现bug
+    // 如果当前节点的左右孩子节点符合要求则递归下去，否则递归终止返回false，或者遍历到叶节点返回true
+    public boolean verifyPostorder(int[] postorder) {
+        return verifyPostorder(postorder, 0, postorder.length - 1);
+    }
+
+    public boolean verifyPostorder(int[] postorder, int l, int r) {
+        if (l >= r)
+            return true;
+        int root = postorder[r];
+        int index = searchIndex(postorder, root, l, r);
+        if (r - 1 <= index) {
+            if (postorder[index] > root)
+                return false;
+        } else if (index < 0) {
+            if (postorder[r - 1] < root)
+                return false;
+        } else {
+            if (postorder[index] > root || postorder[r - 1] < root)
+                return false;
+        }
+        return verifyPostorder(postorder, l, index) && verifyPostorder(postorder, index + 1, r - 1);
+    }
+
+    private int searchIndex(int[] arr, int root, int l, int r) { // 左子树根节点
+        for (int i = l; i < r; i++) {
+            if (arr[i] > root) {
+                return i - 1;
+            }
+        }
+        return r - 1;
+    }
+
+    // 方式一：递归+分治
+    public boolean verifyPostorder1(int[] postorder) {
+        return recur(postorder, 0, postorder.length - 1);
+    }
+
+    boolean recur(int[] postorder, int i, int j) {
+        if (i >= j)
+            return true;
+        int p = i;
+        while (postorder[p] < postorder[j]) // 两处while不用考虑边界条件，如果p增加到j会自动退出
+            p++;
+        int m = p; // m - 1 为当前节点的左孩子节点
+        while (postorder[p] > postorder[j]) // 此处解决了my solution的局部性问题
+            p++;
+        return p == j && recur(postorder, i, m - 1) && recur(postorder, m, j - 1);
+    }
+
+    // 方式二：栈，不太理解
+    public boolean verifyPostorder2(int[] postorder) {
+        Stack<Integer> stack = new Stack<>();
+        int root = Integer.MAX_VALUE;
+        for(int i = postorder.length - 1; i >= 0; i--) {
+            if(postorder[i] > root)
+                return false;
+            while(!stack.isEmpty() && stack.peek() > postorder[i])
+                root = stack.pop();
+            stack.add(postorder[i]);
+        }
+        return true;
     }
 }
