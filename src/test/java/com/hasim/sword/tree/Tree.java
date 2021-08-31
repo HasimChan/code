@@ -1,13 +1,10 @@
 package com.hasim.sword.tree;
 
-import com.sun.jmx.remote.internal.ArrayQueue;
-
 import java.util.*;
 
 public class Tree {
 
     public TreeNode createTree(int[] array) {
-
 
         return null;
     }
@@ -44,6 +41,21 @@ public class Tree {
             System.out.println(node.val);
         }
     }
+
+    public void preOrderPrintNotRec(TreeNode node) {
+        Stack<TreeNode> stack = new Stack<>();
+        stack.push(node);
+        while (!stack.isEmpty()) {
+            TreeNode pop = stack.pop();
+            System.out.println(pop.val);
+            if (pop.right != null) {
+                stack.push(pop.right);
+            }
+            if (pop.left != null) {
+                stack.push(pop.left);
+            }
+        }
+    }
 }
 
 class TreeNode {
@@ -62,30 +74,32 @@ class TreeNode {
  */
 class BuildTree {
     public static void main(String[] args) {
-//        TreeNode node0 = new TreeNode(0);
-//        TreeNode node1 = new TreeNode(1);
-//        TreeNode node2 = new TreeNode(2);
-//        TreeNode node3 = new TreeNode(3);
-//        TreeNode node4 = new TreeNode(4);
-//        TreeNode node5 = new TreeNode(5);
-//        TreeNode node6 = new TreeNode(6);
-//
-//        node0.left = node1;
-//        node0.right = node2;
-//        node1.left = node3;
-//        node1.right = node4;
-//        node2.left = node5;
-//        node2.right = node6;
+        TreeNode node0 = new TreeNode(0);
+        TreeNode node1 = new TreeNode(1);
+        TreeNode node2 = new TreeNode(2);
+        TreeNode node3 = new TreeNode(3);
+        TreeNode node4 = new TreeNode(4);
+        TreeNode node5 = new TreeNode(5);
+        TreeNode node6 = new TreeNode(6);
 
-//        new Tree().postOrderPrint(node0);
+        node0.left = node1;
+        node0.right = node2;
+        node1.left = node3;
+        node1.right = node4;
+        node2.left = node5;
+        node2.right = node6;
+
+        new Tree().preOrderPrint(node0);
+        System.out.println("---***---");
+        new Tree().preOrderPrintNotRec(node0);
 
 //        int[] preorder = new int[]{3,9,20,15,7};
 //        int[] inorder = new int[]{9,3,15,20,7};
-        int[] preorder = new int[]{1, 2};
-        int[] inorder = new int[]{2, 1};
-
-        TreeNode treeNode = new BuildTree().buildTree(preorder, inorder);
-        new Tree().preOrderPrint(treeNode);
+//        int[] preorder = new int[]{1, 2};
+//        int[] inorder = new int[]{2, 1};
+//
+//        TreeNode treeNode = new BuildTree().buildTree(preorder, inorder);
+//        new Tree().preOrderPrint(treeNode);
     }
 
     // 方式一：同my solution，采用哈希表使得查找更加高效，指针比my solution多了一个，可以，但没必要
@@ -600,13 +614,115 @@ class VerifyPostorder {
     public boolean verifyPostorder2(int[] postorder) {
         Stack<Integer> stack = new Stack<>();
         int root = Integer.MAX_VALUE;
-        for(int i = postorder.length - 1; i >= 0; i--) {
-            if(postorder[i] > root)
+        for (int i = postorder.length - 1; i >= 0; i--) {
+            if (postorder[i] > root)
                 return false;
-            while(!stack.isEmpty() && stack.peek() > postorder[i])
+            while (!stack.isEmpty() && stack.peek() > postorder[i])
                 root = stack.pop();
             stack.add(postorder[i]);
         }
         return true;
+    }
+}
+
+/**
+ * 递归保留集合数组等变量可将变量作为类变量
+ */
+class PathSum {
+    public List<List<Integer>> pathSum(TreeNode root, int target) {
+        Stack<TreeNode> stack = new Stack<>();
+        LinkedList<Integer> path = new LinkedList<>();
+        LinkedList<List<Integer>> res = new LinkedList<>();
+        int count = 0;
+        stack.push(root);
+        while (!stack.isEmpty()) {
+            TreeNode pop = stack.pop();
+            count += pop.val; // 此做法无法解决左子树突变到右子树，总值骤变为仅剩根节点
+            path.addLast(pop.val);
+            if (pop.left == null && pop.right == null) {
+                if (count == target) {
+                    res.add(path);
+                }
+                count -= pop.val; // 找到也需还原
+                path.removeLast();
+            }
+            if (pop.right != null) {
+                stack.push(pop.right);
+            }
+            if (pop.left != null) {
+                stack.push(pop.left);
+            }
+        }
+        return res;
+    }
+
+    // 方式一：回溯法，先序遍历+路径记录（深度优先）
+    LinkedList<List<Integer>> res = new LinkedList<>();
+    LinkedList<Integer> path = new LinkedList<>();
+
+    public List<List<Integer>> pathSum1(TreeNode root, int sum) {
+        recur(root, sum);
+        return res;
+    }
+
+    void recur(TreeNode root, int tar) {
+        if (root == null)
+            return;
+        path.add(root.val);
+        tar -= root.val;
+        if (tar == 0 && root.left == null && root.right == null)
+            res.add(new LinkedList(path)); // 若直接add path，添加为引用变量，会随path的改变而改变
+        recur(root.left, tar); // 左右递归，避免了my solution中值不匹配的问题
+        recur(root.right, tar);
+        path.removeLast(); // 此处保证了path的正确性，有进有出
+    }
+
+
+    // 方式二：广度优先
+    List<List<Integer>> ret = new LinkedList<List<Integer>>();
+    Map<TreeNode, TreeNode> map = new HashMap<TreeNode, TreeNode>();
+
+    public List<List<Integer>> pathSum2(TreeNode root, int target) {
+        if (root == null) {
+            return ret;
+        }
+
+        Queue<TreeNode> queueNode = new LinkedList<TreeNode>();
+        Queue<Integer> queueSum = new LinkedList<Integer>();
+        queueNode.offer(root);
+        queueSum.offer(0);
+
+        while (!queueNode.isEmpty()) {
+            TreeNode node = queueNode.poll();
+            int rec = queueSum.poll() + node.val;
+
+            if (node.left == null && node.right == null) {
+                if (rec == target) {
+                    getPath(node);
+                }
+            } else {
+                if (node.left != null) {
+                    map.put(node.left, node);
+                    queueNode.offer(node.left);
+                    queueSum.offer(rec);
+                }
+                if (node.right != null) {
+                    map.put(node.right, node);
+                    queueNode.offer(node.right);
+                    queueSum.offer(rec);
+                }
+            }
+        }
+        return ret;
+    }
+
+    public void getPath(TreeNode node) {
+        List<Integer> temp = new LinkedList<Integer>();
+        while (node != null) {
+            temp.add(node.val);
+            node = map.get(node);
+        }
+        Collections.reverse(temp);
+        ret.add(new LinkedList<Integer>(temp));
     }
 }
