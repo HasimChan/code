@@ -1,6 +1,5 @@
-package com.hasim.testother.collection.set;
+package com.hasim.extra.testother.collection.set;
 
-import java.lang.reflect.Array;
 import java.util.*;
 
 public class HashSetStructure {

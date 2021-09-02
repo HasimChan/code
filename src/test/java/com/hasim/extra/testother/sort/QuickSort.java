@@ -1,4 +1,4 @@
-package com.hasim.testother.sort;
+package com.hasim.extra.testother.sort;
 
 import java.util.Random;
 

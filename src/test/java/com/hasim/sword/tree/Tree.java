@@ -68,6 +68,25 @@ class TreeNode {
     }
 }
 
+class Node {
+    public int val;
+    public Node left;
+    public Node right;
+
+    public Node() {
+    }
+
+    public Node(int _val) {
+        val = _val;
+    }
+
+    public Node(int _val, Node _left, Node _right) {
+        val = _val;
+        left = _left;
+        right = _right;
+    }
+}
+
 /**
  * 将数组的值与索引通过哈希表关联比采用遍历查找更高效（如果数组不改变）
  * 二叉树的前序、中序、后序遍历
@@ -724,5 +743,306 @@ class PathSum {
         }
         Collections.reverse(temp);
         ret.add(new LinkedList<Integer>(temp));
+    }
+}
+
+/**
+ * 二叉树中序遍历即排序
+ */
+class treeToDoublyList {
+    // my solution: 中序遍历+队列
+    private LinkedList<Node> queue = new LinkedList<Node>();
+
+    public Node treeToDoublyList(Node root) {
+        if (root == null)
+            return null;
+        recur(root);
+        queue.peek().left = queue.getLast();
+        int len = queue.size();
+        for (int i = 0; i < len - 1; i++) {
+            queue.get(i).right = queue.get(i + 1);
+            queue.get(i + 1).left = queue.get(i);
+        }
+        queue.getLast().right = queue.peek();
+        return queue.peek();
+    }
+
+    private void recur(Node node) {
+        if (node == null)
+            return;
+        recur(node.left);
+        queue.add(node);
+        recur(node.right);
+    }
+
+    // 方式一：中序遍历，妙在直接构造链表
+    Node pre, head;
+
+    public Node treeToDoublyList1(Node root) {
+        if (root == null)
+            return null;
+        dfs(root);
+        head.left = pre;
+        pre.right = head;
+        return head;
+    }
+
+    void dfs(Node cur) {
+        if (cur == null)
+            return;
+        dfs(cur.left);
+        if (pre != null)  // 这里直接构造链表
+            pre.right = cur;
+        else
+            head = cur;
+        cur.left = pre; // 双向链表
+        pre = cur;
+        dfs(cur.right);
+    }
+}
+
+/**
+ * 思路为构造两种遍历的结果，由两种遍历确定二叉树
+ */
+class Codec {
+
+    String serializeData;
+
+    // Encodes a tree to a single string.
+    public String serialize(TreeNode root) {
+
+        return null;
+    }
+
+    // Decodes your encoded data to tree.
+    public TreeNode deserialize(String data) {
+        return null;
+    }
+}
+
+class KthLargest {
+    // my solution: 中序遍历取k
+    private LinkedList<Integer> list = new LinkedList<>();
+
+    public int kthLargest(TreeNode root, int k) {
+        dfs(root);
+        return list.get(list.size() - k);
+    }
+
+    private void dfs(TreeNode node) {
+        if (node == null)
+            return;
+        dfs(node.left);
+        list.add(node.val);
+        dfs(node.right);
+    }
+
+    // 方式一：中序遍历 + 提前返回（更快）
+    int res, k;
+
+    public int kthLargest1(TreeNode root, int k) {
+        this.k = k;
+        dfs1(root);
+        return res;
+    }
+
+    void dfs1(TreeNode root) { // 中序遍历倒序
+        if (root == null)
+            return;
+        dfs1(root.right);
+        if (k == 0)
+            return;
+        if (--k == 0)
+            res = root.val;
+        dfs1(root.left);
+    }
+}
+
+/**
+ * 递归返回void时，要到函数结束才返回
+ * 提前返回
+ */
+class MaxDepth {
+    // my solution: 递归遍历
+    private int depth = 0, res = 0;
+
+    public int maxDepth(TreeNode root) {
+        dfs(root);
+        return res;
+    }
+
+    private void dfs(TreeNode node) {
+        if (node == null) {
+            if (depth > res)
+                res = depth;
+            return;
+        }
+        depth++;
+        dfs(node.left);
+        dfs(node.right);
+        depth--;
+    }
+
+    // 方式一：DFS，太简洁了这个
+    public int maxDepth1(TreeNode root) {
+        if (root == null)
+            return 0;
+        return Math.max(maxDepth1(root.left), maxDepth1(root.right)) + 1;
+    }
+
+    //这个是方式一的扩充版
+    public int maxDepth1plus(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        int left = maxDepth1plus(root.left);
+        int right = maxDepth1plus(root.right);
+
+        return Math.max(left + 1, right + 1);
+    }
+
+    // 方式二：BFS，层数即深度
+    public int maxDepth2(TreeNode root) {
+        if (root == null)
+            return 0;
+        List<TreeNode> queue = new LinkedList<>();
+        List<TreeNode> tmp;
+        queue.add(root);
+
+        int res = 0;
+        while (!queue.isEmpty()) {
+            tmp = new LinkedList<>();
+            for (TreeNode node : queue) {
+                if (node.left != null)
+                    tmp.add(node.left);
+                if (node.right != null)
+                    tmp.add(node.right);
+            }
+            queue = tmp;
+            res++;
+        }
+        return res;
+    }
+}
+
+/**
+ * 平衡二叉树的定义
+ */
+class IsBalanced {
+    // my solution: 递归遍历深度（超时），原因在于没有及时回退
+    boolean isBalance = true;
+
+    public boolean isBalanced(TreeNode root) {
+        dfs(root);
+        return isBalance;
+    }
+
+    private int dfs(TreeNode node) {
+        if (node == null)
+            return 0;
+        int i = dfs(node.left) - dfs(node.right);
+        if (i >= 0 && i > 1) {
+            isBalance = false;
+        } else {
+            if (i < -1)
+                isBalance = false;
+        }
+        return Math.max(dfs(node.left), dfs(node.right)) + 1;
+    }
+
+    // 方式一：递归+提前返回
+    public boolean isBalanced1(TreeNode root) {
+        return recur(root) != -1;
+    }
+
+    private int recur(TreeNode root) {
+        if (root == null)
+            return 0;
+        int left = recur(root.left);
+        if (left == -1)
+            return -1;
+        int right = recur(root.right);
+        if (right == -1)
+            return -1;
+        return Math.abs(left - right) < 2 ? Math.max(left, right) + 1 : -1;
+    }
+
+    // 方式二
+    public boolean isBalanced2(TreeNode root) {
+        if (root == null)
+            return true;
+        return Math.abs(depth(root.left) - depth(root.right)) <= 1 && isBalanced(root.left) && isBalanced(root.right);
+    }
+
+    private int depth(TreeNode root) {
+        if (root == null)
+            return 0;
+        return Math.max(depth(root.left), depth(root.right)) + 1;
+    }
+}
+
+/**
+ * 二分搜索树，且每个值唯一适用
+ * 若 root.val < p.val，则 p 在 root 右子树 中；
+ * 若 root.val > p.val，则 p 在 root 左子树 中；
+ * 若 root.val = p.val，则 p 和 root 指向 同一节点
+ */
+class LowestCommonAncestor {
+    // 方式一：遍历，非递归
+    public TreeNode lowestCommonAncestor1(TreeNode root, TreeNode p, TreeNode q) {
+        while (root != null) {
+            if (root.val < p.val && root.val < q.val) // p,q 都在 root 的右子树中
+                root = root.right; // 遍历至右子节点
+            else if (root.val > p.val && root.val > q.val) // p,q 都在 root 的左子树中
+                root = root.left; // 遍历至左子节点
+            else break;
+        }
+        return root;
+    }
+
+    // 方式二：递归
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        if (root.val < p.val && root.val < q.val) // p,q 都在 root 的右子树中
+            return lowestCommonAncestor(root.right, p, q); // 遍历至右子节点
+        if (root.val > p.val && root.val > q.val) // p,q 都在 root 的左子树中
+            return lowestCommonAncestor(root.left, p, q); // 遍历至左子节点
+        return root;
+    }
+}
+
+/**
+ * 普通二叉树
+ */
+/**
+ * 终止条件：
+ *      当越过叶节点，则直接返回 null ；
+ *      当 root等于 p, q ，则直接返回 root ；
+ * 递推工作：
+ *      开启递归左子节点，返回值记为 left ；
+ *      开启递归右子节点，返回值记为 right ；
+ * 返回值： 根据 left 和 right ，可展开为四种情况；
+ *      当 left 和 right 同时为空 ：说明 root 的左 / 右子树中都不包含 p,q ，返回 null ；
+ *      当 left 和 right 同时不为空 ：说明 p, q 分列在 root 的 异侧 （分别在 左 / 右子树），因此 root 为最近公共祖先，返回 root ；
+ *      当 left 为空 ，right 不为空 ：p,q 都不在 root 的左子树中，直接返回 right 。具体可分为两种情况：
+ *          p,q 其中一个在 root 的 右子树 中，此时 right 指向 p/q ；
+ *          p,q 两节点都在 root 的 右子树 中，此时的 right 指向最近公共祖先节点 ；
+ * 当 left 不为空 ， right 为空 ：与情况 3. 同理；
+ */
+class LowestCommonAncestor2 {
+
+    // 方式一：递归
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        if (root == null)
+            return null; // 如果树为空，直接返回null
+        if (root == p || root == q)
+            return root; // 如果 p和q中有等于 root的，那么它们的最近公共祖先即为root（一个节点也可以是它自己的祖先）
+        TreeNode left = lowestCommonAncestor(root.left, p, q); // 递归遍历左子树，只要在左子树中找到了p或q，则先找到谁就返回谁
+        TreeNode right = lowestCommonAncestor(root.right, p, q); // 递归遍历右子树，只要在右子树中找到了p或q，则先找到谁就返回谁
+        if (left == null)
+            return right; // 如果在左子树中 p和 q都找不到，则 p和 q一定都在右子树中，右子树中先遍历到的那个就是最近公共祖先（一个节点也可以是它自己的祖先）
+        else if (right == null)
+            return left; // 否则，如果 left不为空，在左子树中有找到节点（p或q），这时候要再判断一下右子树中的情况，如果在右子树中，p和q都找不到，则 p和q一定都在左子树中，左子树中先遍历到的那个就是最近公共祖先（一个节点也可以是它自己的祖先）
+        else
+            return root; //否则，当 left和 right均不为空时，说明 p、q节点分别在 root异侧, 最近公共祖先即为 root
     }
 }

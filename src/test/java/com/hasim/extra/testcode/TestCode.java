@@ -1,11 +1,9 @@
-package com.hasim.testcode;
+package com.hasim.extra.testcode;
 
 
 import org.junit.Test;
 
 import java.util.*;
-
-import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class TestCode {
 
