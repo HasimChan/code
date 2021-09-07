@@ -11,12 +11,57 @@
             </LeetcodeEditor>
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/com/hasim/code/leetcode/editor/cn/[118]杨辉三角.java">
+          <value>
+            <LeetcodeEditor>
+              <option name="contentPath" value="$PROJECT_DIR$/src/main/java/com/hasim/code/leetcode/editor/cn/doc/content/[118]杨辉三角.md" />
+              <option name="path" value="$PROJECT_DIR$/src/main/java/com/hasim/code/leetcode/editor/cn/[118]杨辉三角.java" />
+              <option name="questionId" value="118" />
+            </LeetcodeEditor>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/com/hasim/code/leetcode/editor/cn/[119]杨辉三角 II.java">
+          <value>
+            <LeetcodeEditor>
+              <option name="contentPath" value="$PROJECT_DIR$/src/main/java/com/hasim/code/leetcode/editor/cn/doc/content/[119]杨辉三角 II.md" />
+              <option name="path" value="$PROJECT_DIR$/src/main/java/com/hasim/code/leetcode/editor/cn/[119]杨辉三角 II.java" />
+              <option name="questionId" value="119" />
+            </LeetcodeEditor>
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/src/main/java/com/hasim/code/leetcode/editor/cn/[1]两数之和.java">
           <value>
             <LeetcodeEditor>
               <option name="contentPath" value="$PROJECT_DIR$/src/main/java/com/hasim/code/leetcode/editor/cn/doc/content/[1]两数之和.md" />
               <option name="path" value="$PROJECT_DIR$/src/main/java/com/hasim/code/leetcode/editor/cn/[1]两数之和.java" />
               <option name="questionId" value="1" />
+            </LeetcodeEditor>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/com/hasim/code/leetcode/editor/cn/[509]斐波那契数.java">
+          <value>
+            <LeetcodeEditor>
+              <option name="contentPath" value="$PROJECT_DIR$/src/main/java/com/hasim/code/leetcode/editor/cn/doc/content/[509]斐波那契数.md" />
+              <option name="path" value="$PROJECT_DIR$/src/main/java/com/hasim/code/leetcode/editor/cn/[509]斐波那契数.java" />
+              <option name="questionId" value="509" />
+            </LeetcodeEditor>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/com/hasim/code/leetcode/editor/cn/[53]最大子序和.java">
+          <value>
+            <LeetcodeEditor>
+              <option name="contentPath" value="$PROJECT_DIR$/src/main/java/com/hasim/code/leetcode/editor/cn/doc/content/[53]最大子序和.md" />
+              <option name="path" value="$PROJECT_DIR$/src/main/java/com/hasim/code/leetcode/editor/cn/[53]最大子序和.java" />
+              <option name="questionId" value="53" />
+            </LeetcodeEditor>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/com/hasim/code/leetcode/editor/cn/[70]爬楼梯.java">
+          <value>
+            <LeetcodeEditor>
+              <option name="contentPath" value="$PROJECT_DIR$/src/main/java/com/hasim/code/leetcode/editor/cn/doc/content/[70]爬楼梯.md" />
+              <option name="path" value="$PROJECT_DIR$/src/main/java/com/hasim/code/leetcode/editor/cn/[70]爬楼梯.java" />
+              <option name="questionId" value="70" />
             </LeetcodeEditor>
           </value>
         </entry>
@@ -57,6 +102,24 @@
             <LeetcodeEditor>
               <option name="path" value="$PROJECT_DIR$/src/main/java/com/hasim/code/leetcode/editor/cn/[剑指 Offer 12]矩阵中的路径.java" />
               <option name="questionId" value="100279" />
+            </LeetcodeEditor>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/com/hasim/code/leetcode/editor/cn/[剑指 Offer 14- II]剪绳子 II.java">
+          <value>
+            <LeetcodeEditor>
+              <option name="contentPath" value="$PROJECT_DIR$/src/main/java/com/hasim/code/leetcode/editor/cn/doc/content/[剑指 Offer 14- II]剪绳子 II.md" />
+              <option name="path" value="$PROJECT_DIR$/src/main/java/com/hasim/code/leetcode/editor/cn/[剑指 Offer 14- II]剪绳子 II.java" />
+              <option name="questionId" value="剑指 Offer 14- II" />
+            </LeetcodeEditor>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/com/hasim/code/leetcode/editor/cn/[剑指 Offer 14- I]剪绳子.java">
+          <value>
+            <LeetcodeEditor>
+              <option name="contentPath" value="$PROJECT_DIR$/src/main/java/com/hasim/code/leetcode/editor/cn/doc/content/[剑指 Offer 14- I]剪绳子.md" />
+              <option name="path" value="$PROJECT_DIR$/src/main/java/com/hasim/code/leetcode/editor/cn/[剑指 Offer 14- I]剪绳子.java" />
+              <option name="questionId" value="剑指 Offer 14- I" />
             </LeetcodeEditor>
           </value>
         </entry>
@@ -278,6 +341,15 @@
             <LeetcodeEditor>
               <option name="path" value="$PROJECT_DIR$/src/main/java/com/hasim/code/leetcode/editor/cn/[剑指 Offer 58 - I]翻转单词顺序.java" />
               <option name="questionId" value="100328" />
+            </LeetcodeEditor>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/com/hasim/code/leetcode/editor/cn/[剑指 Offer 63]股票的最大利润.java">
+          <value>
+            <LeetcodeEditor>
+              <option name="contentPath" value="$PROJECT_DIR$/src/main/java/com/hasim/code/leetcode/editor/cn/doc/content/[剑指 Offer 63]股票的最大利润.md" />
+              <option name="path" value="$PROJECT_DIR$/src/main/java/com/hasim/code/leetcode/editor/cn/[剑指 Offer 63]股票的最大利润.java" />
+              <option name="questionId" value="剑指 Offer 63" />
             </LeetcodeEditor>
           </value>
         </entry>
